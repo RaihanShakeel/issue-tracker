@@ -1,2 +1,13 @@
 @import 'tailwindcss';
 
+/* globals.css */
+:root {
+  --font-family: var(--font-inter);
+}
+
+/* Apply to Radix components */
+.radix-themes {
+  font-family: var(--font-inter);
+  
+}
+
