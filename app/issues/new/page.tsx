@@ -11,6 +11,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import { createIssueSchema } from '@/app/validationSchema';
 import { z } from 'zod';
 import ErrorMessage from '@/app/components/ErrorMessage';
+import LoadingIndicator from '@/app/components/LoadingIndicator';
 
 
 type IssueForm = z.infer<typeof createIssueSchema>;
@@ -24,6 +25,7 @@ const NewIssuePage = () => {
     );
     const router  = useRouter();
     const [ error, setError ] = useState('');
+    const [ isLoading, SetLoading ] = useState(false);
   return (
     <div className='max-w-xl'>
         {
@@ -34,10 +36,14 @@ const NewIssuePage = () => {
         <form className='space-y-3'
             onSubmit={handleSubmit( async (data)=>{
                 try {
+                    SetLoading(true);
                     await axios.post('http://localhost:3000/api/issues', data);
                     router.push('/issues');
                 } catch (error) {
+                    SetLoading(false);
                     setError("An unexpected error occured.");
+                }finally{
+                    SetLoading(false);
                 }
             }
 
@@ -51,7 +57,7 @@ const NewIssuePage = () => {
                 render={({field})=> <SimpleMDE placeholder='Description' {...field}/>} 
             />
             <ErrorMessage>{errors.description?.message}</ErrorMessage>
-            <Button>Submit Issue</Button>
+            <Button disabled={isLoading}>Submit Issue {isLoading && <LoadingIndicator/>}</Button>
         </form>
     </div>
   )
