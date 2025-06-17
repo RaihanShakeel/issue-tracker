@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link';
+import Link from '../components/Link';
 import { Button, Table } from '@radix-ui/themes';
 import { prisma } from '@/prisma/client';
 import IssueStatusBadge from '../components/IssueStatusBasdge';
