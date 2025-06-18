@@ -4,6 +4,7 @@ import { Container, Theme } from "@radix-ui/themes";
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Navbar from './Navbar'
+import AuthProvider from './auth/AuthProvider';
 const inter = Inter({ subsets: ['latin'], variable: "--font-inter" })
 
 export const metadata: Metadata = {
@@ -19,18 +20,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <Theme 
-        appearance='light'
-        accentColor='violet'
-        style={{
-          '--default-font-family': 'var(--font-inter)',
-        } as React.CSSProperties}
-        >
-          <Navbar/>
-          <Container>
-            <main className='p-5'>{children}</main>
-          </Container>
-        </Theme>
+          <AuthProvider>
+            <Theme 
+            appearance='light'
+            accentColor='violet'
+            style={{
+              '--default-font-family': 'var(--font-inter)',
+            } as React.CSSProperties}
+            >
+            <Navbar/>
+            <Container>
+              <main>{children}</main>
+            </Container>
+            </Theme>
+          </AuthProvider>
       </body>
     </html>
   )
