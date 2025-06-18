@@ -6,6 +6,7 @@ import React from 'react'
 import ReactMarkDown from 'react-markdown';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import Link from 'next/link';
+import DeleteIssueButton from '../_components/DeleteIssueButton'
 
 interface Props{
     params: Promise<{id: string}>;
@@ -22,22 +23,25 @@ export default async function  ({params}: Props) {
     if (!issue) notFound();
 
     return (
-    <Grid columns={{initial: '1', md: '2'}} gap={'5'}>
-        <Box>
+    <Grid columns={{initial: '1', sm: '5'}} gap={'5'}>
+        <Box className='md:col-span-4'>
             <Heading>{issue.title}</Heading>
             <Flex className='space-x-3' my={'3'}>
                 <IssueStatusBadge status={issue.status}/>
                 <Text>{issue.createdAt.toDateString()}</Text>
             </Flex>
-            <Card className='!prose !lg:prose-xl'>
+            <Card className='prose lg:prose-xl max-w-full'>
                 <ReactMarkDown>{issue.description}</ReactMarkDown>
             </Card>
         </Box>
         <Box>
-            <Button>
-                <Pencil2Icon/>
-                <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
-            </Button>
+            <Flex direction={'column'} gap={'4'}>
+                <Button>
+                    <Pencil2Icon/>
+                    <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
+                </Button>
+                <DeleteIssueButton issueId={issue.id}/>
+            </Flex>
         </Box>
     </Grid>
   )
