@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from '@/prisma/client';
 import { createIssueSchema } from "../../validationSchema";
+import { resolveViewport } from "next/dist/lib/metadata/resolve-metadata";
 
 
 export async function POST(request: NextRequest){
@@ -19,3 +20,4 @@ export async function POST(request: NextRequest){
 
     return NextResponse.json(newIssue, {status: 201});
 }
+
