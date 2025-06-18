@@ -1,4 +1,6 @@
 import { prisma } from "@/prisma/client";
+import { parseAppSegmentConfig } from "next/dist/build/segment-config/app/app-segment-config";
+import { resolveViewport } from "next/dist/lib/metadata/resolve-metadata";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
@@ -33,4 +35,25 @@ export async function PATCH(request: NextRequest, {params}: Props){
     return NextResponse.json({
         message: "Issue Updated Successfully."
     }, {status: 200});
+}
+
+export async function DELETE(request: NextRequest, {params}: {params: Promise<{id: string}>}){
+    const resolveParams = await params;
+    const issue = await prisma.issue.findUnique({
+        where: {id: parseInt(resolveParams.id)}
+    });
+
+    if(!issue){
+        return NextResponse.json({
+            message: 'Issue not found'
+        }, {status: 404});
+    }
+
+    await prisma.issue.delete({
+        where: {id: parseInt(resolveParams.id)}
+    });
+
+    return NextResponse.json({
+        message: 'Issue deleted successfully.'
+    });
 }
