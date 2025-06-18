@@ -4,7 +4,6 @@ import Link from 'next/link'
 import {ImBug} from 'react-icons/im';
 import { usePathname } from 'next/navigation';
 import classnames from 'classnames';
-import { Container } from '@radix-ui/themes';
 
 const Navbar = () => {
     const links = [
