@@ -3,15 +3,18 @@ import React, {useState} from 'react'
 import { Button, AlertDialog, Flex } from '@radix-ui/themes'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import LoadingIndicator from '@/app/components/LoadingIndicator';
+import { Island_Moments } from 'next/font/google';
 
 const DeleteIssueButton = ({issueId}: {issueId: number}) => {
   const router = useRouter();
   const [error, setError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   return (
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color='red'>Delete Issue</Button>
+          <Button color='red' disabled={isLoading}>Delete Issue {isLoading && <LoadingIndicator/>}</Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Title>Delete Issue</AlertDialog.Title>
@@ -25,11 +28,16 @@ const DeleteIssueButton = ({issueId}: {issueId: number}) => {
             <AlertDialog.Action>
               <Button color='red' variant='solid' onClick={async ()=> {
                 try {
+                  setLoading(true);
                   await axios.delete(`/api/issues/${issueId}`);
                   router.push('/issues');
                   router.refresh();  
                 } catch (error) {
+                  setLoading(false);
                   setError(true);
+                }
+                finally{
+                  setLoading(false);
                 }
                 }}>Delete</Button>
             </AlertDialog.Action>
