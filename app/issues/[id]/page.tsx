@@ -7,6 +7,7 @@ import ReactMarkDown from 'react-markdown';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import DeleteIssueButton from '../_components/DeleteIssueButton'
+import AssigneeSelect from './AssigneeSelect'
 
 interface Props{
     params: Promise<{id: string}>;
@@ -36,11 +37,13 @@ export default async function  ({params}: Props) {
         </Box>
         <Box>
             <Flex direction={'column'} gap={'4'}>
+                <AssigneeSelect/>
                 <Button>
                     <Pencil2Icon/>
                     <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
                 </Button>
                 <DeleteIssueButton issueId={issue.id}/>
+                
             </Flex>
         </Box>
     </Grid>

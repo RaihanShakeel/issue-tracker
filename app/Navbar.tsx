@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import classnames from 'classnames';
 import {useSession} from 'next-auth/react';
 import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]/route';
 
 const Navbar = () => {
     const links = [
@@ -48,7 +50,7 @@ const Navbar = () => {
             ? <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
                   <Avatar
-                  src={session.user!.image!}
+                  src={session!.user!.image!}
                   fallback='?'
                   size='2'
                   radius='full'
@@ -58,7 +60,10 @@ const Navbar = () => {
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>
                   <Text size='2'>
-                    {session.user!.email}
+                    {session!.user!.email}
+                  </Text>
+                  <Text>
+                    {session!.user!.name}
                   </Text>
                   <DropdownMenu.Item>
                     <Link href='/api/auth/signout'>Logout</Link>
