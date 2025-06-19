@@ -1,7 +1,6 @@
 import { prisma } from "@/prisma/client";
-import { parseAppSegmentConfig } from "next/dist/build/segment-config/app/app-segment-config";
-import { resolveViewport } from "next/dist/lib/metadata/resolve-metadata";
 import { NextRequest, NextResponse } from "next/server";
+import { patchIssueSchema } from "@/app/validationSchema";
 
 interface Props {
     params: Promise<{id: string}>;
@@ -9,6 +8,24 @@ interface Props {
 export async function PATCH(request: NextRequest, {params}: Props){
     const resolveParams = await params;
     const body = await request.json();
+
+    const validation = patchIssueSchema.safeParse(body);
+    if(!validation.success){
+        return NextResponse.json(validation.error.format())
+    }
+
+    const {assignedToUserId, title, description} = body;
+    if(assignedToUserId){
+        const user = await prisma.user.findUnique({
+            where: {id: assignedToUserId}
+        });
+        if(!user){
+            return NextResponse.json(
+                {message: 'Invalid User'},
+                {status: 400}
+            )
+        }
+    }
 
     const issue = prisma.issue.findUnique({
         where: {
@@ -27,8 +44,9 @@ export async function PATCH(request: NextRequest, {params}: Props){
             id: parseInt(resolveParams.id)
         },
         data: {
-            title: body.title,
-            description: body.description
+            title: title,
+            description: description,
+            assignedToUserId: assignedToUserId
         }
     });
 

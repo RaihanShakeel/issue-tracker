@@ -37,7 +37,7 @@ export default async function  ({params}: Props) {
         </Box>
         <Box>
             <Flex direction={'column'} gap={'4'}>
-                <AssigneeSelect/>
+                <AssigneeSelect issue={issue}/>
                 <Button>
                     <Pencil2Icon/>
                     <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
