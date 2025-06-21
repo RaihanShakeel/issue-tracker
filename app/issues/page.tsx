@@ -38,7 +38,7 @@ const IssuesPage = async ({searchParams}: {searchParams: Promise<{status: Status
         <Table.Header>
           <Table.Row>
             {columns.map(column => (
-              <Table.ColumnHeaderCell key={column.label}>
+              <Table.ColumnHeaderCell key={column.label} className={column.className}>
                 <NextLink href={{query: {...resolvedParams, orderBy: column.value}}}>{column.label}</NextLink>
                 {column.value === resolvedParams.orderBy && <ArrowUpIcon className='inline'/>}
               </Table.ColumnHeaderCell>
