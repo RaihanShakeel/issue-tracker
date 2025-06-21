@@ -8,6 +8,14 @@ import IssuePageActions from './IssuePageActions';
 import { Issue, Status } from '../generated/prisma';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
 
+
+
+const columns: {label: string, value: keyof Issue, className?: string}[]=[
+    {label: 'Issue', value: 'title'},
+    {label: 'Status', value: 'status', className: 'hidden md:table-cell'},
+    {label: 'CreateAt', value: 'createdAt', className: 'hidden md:table-cell'}
+  ]
+
 const IssuesPage = async ({searchParams}: {searchParams: Promise<{status: Status, orderBy: keyof Issue}>}) => {
   const resolvedParams = await searchParams;
 
@@ -16,16 +24,13 @@ const IssuesPage = async ({searchParams}: {searchParams: Promise<{status: Status
     ? resolvedParams.status
     : undefined;
 
+  const orderBy = columns.map(column => column.value).includes(resolvedParams.orderBy)
+    ? { [resolvedParams.orderBy]: 'asc' } : undefined;
+
   const issues = await prisma.issue.findMany({
-    where: {status}
+    where: {status},
+    orderBy
   });
-
-
-  const columns: {label: string, value: keyof Issue, className?: string}[]=[
-    {label: 'Issue', value: 'title'},
-    {label: 'Status', value: 'status', className: 'hidden md:table-cell'},
-    {label: 'CreateAt', value: 'createdAt', className: 'hidden md:table-cell'}
-  ]
   return (
     <div>
       <IssuePageActions/>
