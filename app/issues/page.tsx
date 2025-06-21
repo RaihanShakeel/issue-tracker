@@ -7,6 +7,7 @@ import NextLink from 'next/link';
 import IssuePageActions from './IssuePageActions';
 import { Issue, Status } from '../generated/prisma';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
+import Pagination from '../components/Pagination';
 
 
 
@@ -16,20 +17,35 @@ const columns: {label: string, value: keyof Issue, className?: string}[]=[
     {label: 'CreateAt', value: 'createdAt', className: 'hidden md:table-cell'}
   ]
 
-const IssuesPage = async ({searchParams}: {searchParams: Promise<{status: Status, orderBy: keyof Issue}>}) => {
+const IssuesPage = async (
+  {searchParams}: 
+  {searchParams: Promise<{
+    status: Status, 
+    orderBy: keyof Issue,
+    page: string
+  }>}) => {
   const resolvedParams = await searchParams;
 
   const statuses = Object.values(Status);
   const status = statuses.includes(resolvedParams.status)
     ? resolvedParams.status
     : undefined;
+  
+  const where = {status}
 
   const orderBy = columns.map(column => column.value).includes(resolvedParams.orderBy)
     ? { [resolvedParams.orderBy]: 'asc' } : undefined;
 
+  const page = parseInt(resolvedParams.page) || 1;
+  const pageSize = 10
+
+  const IssueCount = await prisma.issue.count({where});
+
   const issues = await prisma.issue.findMany({
-    where: {status},
-    orderBy
+    where,
+    orderBy,
+    skip: (page-1) * pageSize,
+    take: pageSize
   });
   return (
     <div>
@@ -60,6 +76,7 @@ const IssuesPage = async ({searchParams}: {searchParams: Promise<{status: Status
           ))}
         </Table.Body>
       </Table.Root>
+      <Pagination pageSize={pageSize} currentPage={page} itemCount={IssueCount}/>
     </div>
   );
 }
