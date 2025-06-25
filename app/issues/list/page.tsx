@@ -1,8 +1,8 @@
 import { prisma } from '@/prisma/client';
-import Pagination from '../components/Pagination';
-import { Status } from '../generated/prisma';
-import IssueTable, { columnValues, IssueQury } from './_components/IssueTable';
-import IssuePageActions from './IssuePageActions';
+import Pagination from '../../components/Pagination';
+import { Status } from '../../generated/prisma';
+import IssueTable, { columnValues, IssueQury } from '../_components/IssueTable';
+import IssuePageActions from '../_components/IssuePageActions';
 
 
 const IssuesPage = async (

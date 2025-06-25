@@ -7,7 +7,8 @@ import ReactMarkDown from 'react-markdown';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import DeleteIssueButton from '../_components/DeleteIssueButton'
-import AssigneeSelect from './AssigneeSelect'
+import AssigneeSelect from '../_components/AssigneeSelect'
+import delay from 'delay';
 
 interface Props{
     params: Promise<{id: string}>;
@@ -23,6 +24,8 @@ export default async function  ({params}: Props) {
 
     if (!issue) notFound();
 
+    
+    await delay(2000);
     return (
     <Grid columns={{initial: '1', sm: '5'}} gap={'5'}>
         <Box className='md:col-span-4'>
@@ -40,7 +43,7 @@ export default async function  ({params}: Props) {
                 <AssigneeSelect issue={issue}/>
                 <Button>
                     <Pencil2Icon/>
-                    <Link href={`/issues/${issue.id}/edit`}>Edit Issue</Link>
+                    <Link href={`/issues/edit/${issue.id}`}>Edit Issue</Link>
                 </Button>
                 <DeleteIssueButton issueId={issue.id}/>
                 

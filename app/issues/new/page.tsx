@@ -1,20 +1,24 @@
-"use client";
-import { Callout, TextField, Button, Text } from '@radix-ui/themes'
-import React from 'react'
-import SimpleMDE from "react-simplemde-editor";
+'use client';
+import { createIssueSchema } from '@/app/validationSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import 'easymde/dist/easymde.min.css';
-import { useForm, Controller } from 'react-hook-form';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import {zodResolver} from '@hookform/resolvers/zod';
-import { createIssueSchema } from '@/app/validationSchema';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import ErrorMessage from '@/app/components/ErrorMessage';
-import LoadingIndicator from '@/app/components/LoadingIndicator';
+import dynamic from 'next/dynamic';
+import IssuePageSkeleton from '../_components/IssuePageSkeleton';
 
 
-type IssueForm = z.infer<typeof createIssueSchema>;
+const IssueForm = dynamic(
+    () => import('../_components/IssueForm'),
+    {
+      ssr: false,
+      loading: () => <IssuePageSkeleton/>
+
+    }
+    
+);
 
 const NewIssuePage = () => {
 
@@ -27,39 +31,7 @@ const NewIssuePage = () => {
     const [ error, setError ] = useState('');
     const [ isLoading, SetLoading ] = useState(false);
   return (
-    <div className='max-w-xl'>
-        {
-            error && <Callout.Root color='red' className='mb-3'>
-                <Callout.Text>{error}</Callout.Text>
-            </Callout.Root>
-        }
-        <form className='space-y-3'
-            onSubmit={handleSubmit( async (data)=>{
-                try {
-                    SetLoading(true);
-                    await axios.post('http://localhost:3000/api/issues', data);
-                    router.push('/issues');
-                } catch (error) {
-                    SetLoading(false);
-                    setError("An unexpected error occured.");
-                }finally{
-                    SetLoading(false);
-                }
-            }
-
-            )}
-        >
-            <TextField.Root placeholder='Title' {...register('title')}/>
-            <ErrorMessage>{errors.title?.message}</ErrorMessage>
-            <Controller
-                name='description'
-                control={control}
-                render={({field})=> <SimpleMDE placeholder='Description' {...field}/>} 
-            />
-            <ErrorMessage>{errors.description?.message}</ErrorMessage>
-            <Button disabled={isLoading}>Submit Issue {isLoading && <LoadingIndicator/>}</Button>
-        </form>
-    </div>
+    <IssueForm/>
   )
 }
 

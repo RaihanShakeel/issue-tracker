@@ -1,10 +1,7 @@
-import React from 'react'
-import IssuePageActions from './IssuePageActions'
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import { prisma } from '@/prisma/client';
 import { Table } from '@radix-ui/themes';
-import IssueStatusBadge from '../components/IssueStatusBasdge';
-import {prisma} from '@/prisma/client';
+import Skeleton from '@/app/components/Skeleton';
+import IssuePageActions from '../_components/IssuePageActions';
 
 const IssuePageLoadingIndicator = async() => {
     const issues = await prisma.issue.findMany();

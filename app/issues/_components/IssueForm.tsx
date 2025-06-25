@@ -1,19 +1,17 @@
-"use client";
-import { Callout, TextField, Button, Text } from '@radix-ui/themes'
-import React from 'react'
-import SimpleMDE from "react-simplemde-editor";
-import 'easymde/dist/easymde.min.css';
-import { useForm, Controller } from 'react-hook-form';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import {zodResolver} from '@hookform/resolvers/zod';
-import { createIssueSchema } from '@/app/validationSchema';
-import { z } from 'zod';
+'use client';
 import ErrorMessage from '@/app/components/ErrorMessage';
 import LoadingIndicator from '@/app/components/LoadingIndicator';
-import { Issue } from '../generated/prisma';
-
+import { createIssueSchema } from '@/app/validationSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Callout, TextField } from '@radix-ui/themes';
+import axios from 'axios';
+import 'easymde/dist/easymde.min.css';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import SimpleMDE from 'react-simplemde-editor';
+import { z } from 'zod';
+import { Issue } from '../../generated/prisma';
 
 type IssueFormSchema = z.infer<typeof createIssueSchema>;
 
@@ -41,11 +39,11 @@ const IssueForm = ({issue} : {issue? : Issue}) => {
                     if(issue){
                         await axios.patch(`/api/issues/${issue?.id}`, data);
                         router.refresh();
-                        router.push('/issues');
+                        router.push('/issues/list');
                     }else{
                         await axios.post('/api/issues', data);
                         router.refresh();
-                        router.push('/issues');
+                        router.push('/issues/list');
                     }
                 } catch (error) {
                     SetLoading(false);

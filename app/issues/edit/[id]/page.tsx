@@ -1,7 +1,9 @@
 import React from 'react'
-import IssueForm from '../../IssueForm'
+import dynamic from 'next/dynamic';
 import {prisma} from '../../../../prisma/client';
 import { notFound } from 'next/navigation';
+import IssueFormWrapper from '../../_components/IssueFormWrapper';
+
 
 const IssueEditPage = async ({params}: {params: Promise<{id: string}>}) => {
     const resolveParams = await params;
@@ -13,7 +15,7 @@ const IssueEditPage = async ({params}: {params: Promise<{id: string}>}) => {
     if (!issue) notFound();
   return (
     <div>
-      <IssueForm issue={issue}/>
+      <IssueFormWrapper issue={issue}/>
     </div>
   )
 }

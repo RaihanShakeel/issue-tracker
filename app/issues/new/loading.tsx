@@ -1,11 +1,4 @@
-import React from 'react'
+'use client';
+import IssuePageSkeleton from "../_components/IssuePageSkeleton";
 
-const LoadingNewIssuePage = () => {
-  return (
-    <div>
-      Loading...
-    </div>
-  )
-}
-
-export default LoadingNewIssuePage
+export default IssuePageSkeleton;
