@@ -1,20 +1,22 @@
+import authOptions from '@/app/auth/Options'
 import IssueStatusBadge from '@/app/components/IssueStatusBasdge'
 import { prisma } from '@/prisma/client'
-import { Box, Button, Card, Flex, Grid, Heading , Text} from '@radix-ui/themes'
+import { Pencil2Icon } from '@radix-ui/react-icons'
+import { Box, Button, Card, Flex, Grid, Heading, Text } from '@radix-ui/themes'
+import { getServerSession } from 'next-auth'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import React from 'react'
-import ReactMarkDown from 'react-markdown';
-import { Pencil2Icon } from '@radix-ui/react-icons';
-import Link from 'next/link';
-import DeleteIssueButton from '../_components/DeleteIssueButton'
+import ReactMarkDown from 'react-markdown'
 import AssigneeSelect from '../_components/AssigneeSelect'
-import delay from 'delay';
+import DeleteIssueButton from '../_components/DeleteIssueButton'
 
 interface Props{
     params: Promise<{id: string}>;
 }
 
 export default async function  ({params}: Props) {
+    const session = await getServerSession(authOptions);
+
     const resolveParams = await params;
     const issue = await prisma.issue.findUnique({
         where: {
@@ -23,9 +25,6 @@ export default async function  ({params}: Props) {
     })
 
     if (!issue) notFound();
-
-    
-    await delay(2000);
     return (
     <Grid columns={{initial: '1', sm: '5'}} gap={'5'}>
         <Box className='md:col-span-4'>
@@ -38,7 +37,7 @@ export default async function  ({params}: Props) {
                 <ReactMarkDown>{issue.description}</ReactMarkDown>
             </Card>
         </Box>
-        <Box>
+        {session && <Box>
             <Flex direction={'column'} gap={'4'}>
                 <AssigneeSelect issue={issue}/>
                 <Button>
@@ -48,7 +47,7 @@ export default async function  ({params}: Props) {
                 <DeleteIssueButton issueId={issue.id}/>
                 
             </Flex>
-        </Box>
+        </Box>}
     </Grid>
   )
 }

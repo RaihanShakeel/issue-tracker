@@ -1,14 +1,21 @@
 import { prisma } from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { patchIssueSchema } from "@/app/validationSchema";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/Options";
 
 interface Props {
     params: Promise<{id: string}>;
 }
 export async function PATCH(request: NextRequest, {params}: Props){
+    const session = await getServerSession(authOptions);
+
+    if (!session){
+        return NextResponse.json({message: 'you are unothorized to do that'}, {status: 401});
+    }
+
     const resolveParams = await params;
     const body = await request.json();
-
     const validation = patchIssueSchema.safeParse(body);
     if(!validation.success){
         return NextResponse.json(validation.error.format())
