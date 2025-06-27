@@ -38,6 +38,8 @@
     "react-loading-skeleton": "^3.5.0",
     "react-markdown": "^8.0.7",
     "react-simplemde-editor": "^5.2.0",
+    "rechart": "^0.0.1",
+    "recharts": "^3.0.2",
     "tailwindcss": "4.1.8",
     "typescript": "5.8.3",
     "zod": "^3.25.63"
