@@ -21,15 +21,6 @@ const IssueForm = dynamic(
 );
 
 const NewIssuePage = () => {
-
-    const {register, control, handleSubmit, formState: {errors}} = useForm<IssueForm>(
-        {
-            resolver: zodResolver(createIssueSchema)
-        }
-    );
-    const router  = useRouter();
-    const [ error, setError ] = useState('');
-    const [ isLoading, SetLoading ] = useState(false);
   return (
     <IssueForm/>
   )
