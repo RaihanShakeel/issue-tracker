@@ -10,20 +10,19 @@ import ReactMarkDown from 'react-markdown'
 import AssigneeSelect from '../_components/AssigneeSelect'
 import DeleteIssueButton from '../_components/DeleteIssueButton'
 import { title } from 'process'
+import { cache } from 'react'
 
 interface Props{
     params: Promise<{id: string}>;
 }
 
+const fetchUser = cache((userId: number) => prisma.issue.findUnique({where: {id: userId}}));
+
 export default async function  ({params}: Props) {
     const session = await getServerSession(authOptions);
 
     const resolveParams = await params;
-    const issue = await prisma.issue.findUnique({
-        where: {
-            id: parseInt(resolveParams.id)
-        }
-    })
+    const issue = await fetchUser(parseInt(resolveParams.id));
 
     if (!issue) notFound();
     return (
@@ -56,9 +55,7 @@ export default async function  ({params}: Props) {
 
 export async function generateMetadata({params}: Props){
     const resolvedParams = await params;
-    const issue = await prisma.issue.findUnique({
-        where: {id: parseInt(resolvedParams.id)}
-    });
+    const issue = await fetchUser(parseInt(resolvedParams.id));
 
     return {
         title: issue?.title,
