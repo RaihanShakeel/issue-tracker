@@ -9,6 +9,7 @@ import { notFound } from 'next/navigation'
 import ReactMarkDown from 'react-markdown'
 import AssigneeSelect from '../_components/AssigneeSelect'
 import DeleteIssueButton from '../_components/DeleteIssueButton'
+import { title } from 'process'
 
 interface Props{
     params: Promise<{id: string}>;
@@ -50,4 +51,18 @@ export default async function  ({params}: Props) {
         </Box>}
     </Grid>
   )
+}
+
+
+export async function generateMetadata({params}: Props){
+    const resolvedParams = await params;
+    const issue = await prisma.issue.findUnique({
+        where: {id: parseInt(resolvedParams.id)}
+    });
+
+    return {
+        title: issue?.title,
+        description: 'Details of issue' + issue?.id
+    }
+
 }

@@ -3,6 +3,7 @@ import Pagination from '../../components/Pagination';
 import { Status } from '../../generated/prisma';
 import IssueTable, { columnValues, IssueQury } from '../_components/IssueTable';
 import IssuePageActions from '../_components/IssuePageActions';
+import { Metadata } from 'next';
 
 
 const IssuesPage = async (
@@ -40,6 +41,15 @@ const IssuesPage = async (
   );
 }
 
+
+
+
 export const dynamic = 'force-dynamic';
+
+
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Issue List',
+  description: 'View all project issues'
+}
 
 export default IssuesPage

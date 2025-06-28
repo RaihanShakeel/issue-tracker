@@ -1,10 +1,10 @@
-import Image from 'next/image'
-import Pagination from './components/Pagination'
-import page from './issues/[id]/page'
-import LatestIssue from './LatestIssue'
-import IssueSummary from './IssueSummary'
 import { prisma } from '@/prisma/client'
+import { Flex, Grid } from '@radix-ui/themes'
 import IssueChart from './IssueChart'
+import IssueSummary from './IssueSummary'
+import LatestIssue from './LatestIssue'
+import { Metadata } from 'next'
+
 
 export default async function Home() {
   const open = await prisma.issue.count({
@@ -17,7 +17,18 @@ export default async function Home() {
     where: {status: 'CLOSED'}
   });
   return (
-    <IssueChart open={open} closed={closed} inProgress={inProgress}/>
+    <Grid columns={{initial: '1', md: '2'}} gap='5'>
+      <Flex direction='column' gap='5'>
+        <IssueSummary open={open} inProgress={inProgress} closed={closed}/>
+        <IssueChart open={open} inProgress={inProgress} closed={closed} />
+      </Flex>
+      <LatestIssue/>
+    </Grid>
   )
 }
  
+
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Dashboard',
+  description: 'View a summary of project issues'
+}
