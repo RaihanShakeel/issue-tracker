@@ -1,15 +1,11 @@
 'use client';
-import React from 'react'
-import Link from 'next/link'
-import {ImBug} from 'react-icons/im';
-import { usePathname } from 'next/navigation';
-import classnames from 'classnames';
-import {useSession} from 'next-auth/react';
-import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]/route';
 import Skeleton from '@/app/components/Skeleton';
-import { heightPropDefs } from '@radix-ui/themes/dist/esm/props/height.props.js';
+import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes';
+import classnames from 'classnames';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ImBug } from 'react-icons/im';
 
 const Navbar = () => { 
   return (
