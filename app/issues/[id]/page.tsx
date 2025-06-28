@@ -18,7 +18,7 @@ interface Props{
 
 const fetchUser = cache((userId: number) => prisma.issue.findUnique({where: {id: userId}}));
 
-export default async function  ({params}: Props) {
+export default async function IssueDetailsPage({params}: Props) {
     const session = await getServerSession(authOptions);
 
     const resolveParams = await params;
